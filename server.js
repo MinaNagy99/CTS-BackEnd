@@ -1,4 +1,4 @@
-import Express from "express";
+import express from "express";
 import "dotenv/config";
 import dBConnection from "./dataBase/dBConnection.js";
 import morgan from "morgan";
@@ -6,10 +6,10 @@ import websiteRoute from "./src/portfolio/portfolio.router.js";
 import cors from "cors";
 import  dotenv  from "dotenv";
 dotenv.config()
-const app = Express();
+const app = express();
 app.use(cors());
-app.use(Express.json());
-app.use(Express.static("uploads"));
+app.use(express.json());
+app.use(express.static("uploads"));
 dBConnection;
 app.use(morgan("combined"));
 app.use("/website", websiteRoute);
