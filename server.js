@@ -3,8 +3,9 @@ import "dotenv/config";
 import dBConnection from "./dataBase/dBConnection.js";
 import morgan from "morgan";
 import websiteRoute from "./src/portfolio/portfolio.router.js";
-
+import cors from "cors";
 const app = Express();
+app.use(cors());
 app.use(Express.json());
 app.use(Express.static("uploads"));
 dBConnection;
