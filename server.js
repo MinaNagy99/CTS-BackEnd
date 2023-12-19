@@ -17,6 +17,6 @@ app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   res.status(statusCode).json({ err: err, statusCode });
 });
-app.listen(process.env.PORT, (req, res) => {
+app.listen(process.env.PORT||3000, (req, res) => {
   console.log("server listening on port " + process.env.PORT);
 });
