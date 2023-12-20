@@ -2,7 +2,7 @@ import { catchAsyncError } from "../../middleware/catchAsyncError.js";
 import jwt from "jsonwebtoken";
 export const signIn = catchAsyncError(async (req, res, next) => {
   const { email, password } = req.body;
-  if (email == "info@cts.com" && password == "Eng-Kamel@123") {
+  if (email == process.env.EMAIL && password == process.env.PASSWORD) {
     const token = jwt.sign(
       { email, password, role: "admin" },
       process.env.KEY_JWT

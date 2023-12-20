@@ -9,8 +9,8 @@ export const auth = catchAsyncError(async (req, res, next) => {
     if (err) return next(new AppError(err.message));
 
     if (
-      decoded.email == "info@cts.com" &&
-      decoded.password == "Eng-Kamel@123" &&
+      decoded.email == process.env.EMAIL &&
+      decoded.password == process.env.PASSWORD &&
       decoded.role == "admin"
     ) {
       next();
