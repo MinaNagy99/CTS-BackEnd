@@ -20,7 +20,7 @@ app.use("/user", userRouter);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
-  res.status(statusCode).json({ err: err.message, statusCode });
+  res.status(statusCode).send({ err: err.message, statusCode });
 });
 app.listen(process.env.PORT||3000, (req, res) => {
   console.log("server listening on port " + process.env.PORT);
