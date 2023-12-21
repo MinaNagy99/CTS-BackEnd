@@ -25,18 +25,22 @@ export const saveImg = async (req, res, next) => {
         .end(buffer);
     });
   }
+  const { buffer: bufferMainImg } = req.files.mainImg[0];
 
-  const bufferMainImg = req.files.mainImg[0].buffer;
-  const bufferLogo = req.files.logo[0].buffer;
-  const bufferPreviewImgs = req.files.previewImgs.map((img) => img.buffer);
+  const { buffer: bufferLogo } = req.files.logo?.[0] || {};
+  const { buffer: bufferPreviewImgs } = req.files.previewImgs?.[0] || {};
+  
   req.body.mainImg = await uploadToCloudinary(bufferMainImg);
-
-  bufferLogo && (req.body.logo = await uploadToCloudinary(bufferLogo));
-  req.body.previewImgs = await Promise.all(
-    bufferPreviewImgs &&
-      bufferPreviewImgs.map(async (buffer) => {
-        return await uploadToCloudinary(buffer);
-      })
-  );
+  
+  if (bufferLogo) {
+    req.body.logo = await uploadToCloudinary(bufferLogo);
+  }
+  
+  if (bufferPreviewImgs) {
+    req.body.previewImgs = await Promise.all(
+      bufferPreviewImgs.map(async (buffer) => await uploadToCloudinary(buffer))
+    );
+  }
+  
   next();
 };
