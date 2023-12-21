@@ -16,6 +16,10 @@ const schema = mongoose.Schema({
     type: String,
     require: true,
   },
+  link: {
+    type: String,
+    require: true,
+  },
 });
 schema.post(['find','fineOne'],(doc)=>{
     for (let i = 0; i < doc.length; i++) {
