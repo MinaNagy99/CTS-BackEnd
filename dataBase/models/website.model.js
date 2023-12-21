@@ -5,12 +5,10 @@ const schema = mongoose.Schema({
   previewImgs: [
     {
       type: String,
-      require: true,
     },
   ],
   logo: {
     type: String,
-    require: true,
   },
   title: {
     type: String,
@@ -18,7 +16,6 @@ const schema = mongoose.Schema({
   },
   link: {
     type: String,
-    require: true,
   },
 });
 schema.post(['find','fineOne'],(doc)=>{
