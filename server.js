@@ -8,9 +8,9 @@ import  dotenv  from "dotenv";
 import userRouter from "./src/user/user.router.js";
 dotenv.config()
 const app = express();
-app.use(cors());
 app.use(express.json());
 app.use(express.static("uploads"));
+app.use(cors());
 
 dBConnection;
 app.use(morgan("combined"));
