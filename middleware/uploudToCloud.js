@@ -7,6 +7,7 @@ cloudinary.config({
   api_secret: "Dm_JG-zQcAmBf0WRL4WME0PWm0U",
 });
 export const saveImg = async (req, res, next) => {
+
   function uploadToCloudinary(buffer) {
     return new Promise((resolve, reject) => {
       cloudinary.v2.uploader
@@ -25,22 +26,26 @@ export const saveImg = async (req, res, next) => {
         .end(buffer);
     });
   }
-  const { buffer: bufferMainImg } = req.files.mainImg[0];
+  const { buffer: bufferMainImg } = req.files?.mainImg[0] || {};
 
   const { buffer: bufferLogo } = req.files.logo?.[0] || {};
-  const { buffer: bufferPreviewImgs } = req.files.previewImgs?.[0] || {};
-  
-  req.body.mainImg = await uploadToCloudinary(bufferMainImg);
-  
+  const { buffer: bufferPreviewImgs } = req.files.previewImgs || {};
+
+  console.log(req.files.previewImgs);
+  if (req.files.mainImg) {
+    req.body.mainImg = await uploadToCloudinary(bufferMainImg);
+  }
   if (bufferLogo) {
     req.body.logo = await uploadToCloudinary(bufferLogo);
   }
   
-  if (bufferPreviewImgs) {
+  if (req.files.previewImgs) {
+    console.log(bufferPreviewImgs);
     req.body.previewImgs = await Promise.all(
-      bufferPreviewImgs.map(async (buffer) => await uploadToCloudinary(buffer))
+      req.files.previewImgs.map(async (img) => await uploadToCloudinary(img.buffer))
     );
   }
-  
+
   next();
 };
+  

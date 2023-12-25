@@ -8,7 +8,7 @@ const websiteRoute = Router();
 websiteRoute
   .route("/")
   .post(
-    auth,
+     auth,
     uploadMixfile([
       { name: "previewImgs", maxCount: 3 },
       { name: "mainImg", maxCount: 1 },
