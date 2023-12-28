@@ -1,6 +1,7 @@
 import { AppError } from "../../Utilities/Utilities.js";
 import websiteModal from "../../dataBase/models/website.model.js";
 import { catchAsyncError } from "../../middleware/catchAsyncError.js";
+import { removeImage } from "../../middleware/deleteImg.js";
 
 export const addWebsite = catchAsyncError(async (req, res, next) => {
   let result = await websiteModal.create(req.body);
@@ -10,17 +11,35 @@ export const addWebsite = catchAsyncError(async (req, res, next) => {
 
 export const editWebsite = catchAsyncError(async (req, res, next) => {
   let { id } = req.params;
-  
-  let result = await websiteModal.findByIdAndUpdate(id, req.body, {
-    new: true,
-  });
+
+  let result = await websiteModal.findByIdAndUpdate(id, req.body);
+  const { mainImg, logo, previewImgs } = result;
+  if (req.body.mainImg) {
+    removeImage(mainImg.public_id);
+  }
+  if (req.body.logo) {
+    removeImage(logo.public_id);
+  }
+  if (req.body.previewImgs) {
+    previewImgs.map((img) => {
+      removeImage(img.public_id);
+    });
+  }
+
   !result && next(new AppError("not updated", 402));
   res.status(200).send({ message: "success", data: result });
 });
 
 export const deleteWebsite = catchAsyncError(async (req, res) => {
   const { id } = req.params;
-  await websiteModal.findByIdAndDelete(id);
+  const { mainImg, logo, previewImgs } = await websiteModal.findByIdAndDelete(
+    id
+  );
+  const previewImgsIds = previewImgs.map((img) => {
+    return img.public_id;
+  });
+  removeImage(mainImg.public_id, logo.public_id, ...previewImgsIds);
+
   res.status(200).send({ message: "success" });
 });
 

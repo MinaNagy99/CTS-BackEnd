@@ -1,14 +1,19 @@
 import mongoose from "mongoose";
 
 const schema = mongoose.Schema({
-  mainImg: { type: String, required: true },
+  mainImg: {
+    public_id: { type: String, required: true },
+    url: { type: String, required: true },
+  },
   previewImgs: [
     {
-      type: String,
+      public_id: { type: String, required: true },
+      url: { type: String, required: true },
     },
   ],
   logo: {
-    type: String,
+    public_id: { type: String, required: true },
+    url: { type: String, required: true },
   },
   title: {
     type: String,
@@ -19,6 +24,6 @@ const schema = mongoose.Schema({
   },
 });
 
-const websiteModal = mongoose.model('website',schema)
+const websiteModal = mongoose.model("website", schema);
 
-export default websiteModal
+export default websiteModal;

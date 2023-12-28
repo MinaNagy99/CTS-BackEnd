@@ -28,7 +28,7 @@ websiteRoute
       { name: "previewImgs", maxCount: 3 },
       { name: "logo", maxCount: 1 },
     ]),
-    saveImg,
+    saveImg ,
     portfolio.editWebsite
   );
 
