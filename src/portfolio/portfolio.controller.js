@@ -4,6 +4,7 @@ import { catchAsyncError } from "../../middleware/catchAsyncError.js";
 import { removeImage } from "../../middleware/deleteImg.js";
 
 export const addWebsite = catchAsyncError(async (req, res, next) => {
+  console.log(req.body);
   let result = await websiteModal.create(req.body);
   !result && next(new AppError("don't create the website"));
   res.send({ message: "success", data: result });

@@ -8,7 +8,7 @@ const websiteRoute = Router();
 websiteRoute
   .route("/")
   .post(
-     auth,
+    auth,
     uploadMixfile([
       { name: "previewImgs", maxCount: 3 },
       { name: "mainImg", maxCount: 1 },
@@ -17,18 +17,20 @@ websiteRoute
     saveImg,
     portfolio.addWebsite
   )
-  .get(portfolio.getAllWebsites);
+  .get(auth, portfolio.getAllWebsites);
 websiteRoute
   .route("/:id")
-  .delete(portfolio.deleteWebsite)
-  .get(portfolio.getWebsite)
+
+  .delete(auth, portfolio.deleteWebsite)
+  .get(auth, portfolio.getWebsite)
   .put(
+    auth,
     uploadMixfile([
       { name: "mainImg", maxCount: 1 },
       { name: "previewImgs", maxCount: 3 },
       { name: "logo", maxCount: 1 },
     ]),
-    saveImg ,
+    saveImg,
     portfolio.editWebsite
   );
 
