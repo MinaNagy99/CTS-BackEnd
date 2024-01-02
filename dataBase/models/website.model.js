@@ -7,18 +7,19 @@ const schema = mongoose.Schema({
   },
   previewImgs: [
     {
-      public_id: { type: String},
-      url: { type: String},
+      public_id: { type: String },
+      url: { type: String },
     },
   ],
   logo: {
-    public_id: { type: String},
-    url: { type: String},
+    public_id: { type: String },
+    url: { type: String },
   },
   title: {
     type: String,
     require: true,
   },
+  titleInArabic: { type: String, required: true },
   link: {
     type: String,
   },
