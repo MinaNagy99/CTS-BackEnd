@@ -19,7 +19,11 @@ export const addWebsite = catchAsyncError(async (req, res, next) => {
     "ar.json"
   );
   const { title, titleInArabic } = req.body;
-  fs.writeFile(filePathInner, JSON.stringify({ title }, null, 2), "utf8");
+  await fs.writeFile(
+    filePathInner,
+    JSON.stringify({ title: titleInArabic }, null, 2),
+    "utf8"
+  );
   let result = await websiteModal.create(req.body);
   !result && next(new AppError("don't create the website"));
   res.send({ message: "success", data: result });
