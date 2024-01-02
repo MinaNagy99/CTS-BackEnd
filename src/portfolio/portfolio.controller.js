@@ -2,9 +2,24 @@ import { AppError } from "../../Utilities/Utilities.js";
 import websiteModal from "../../dataBase/models/website.model.js";
 import { catchAsyncError } from "../../middleware/catchAsyncError.js";
 import { removeImage } from "../../middleware/deleteImg.js";
+import fs from "fs/promises";
+import { dirname, join } from "path";
+import { fileURLToPath } from "url";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const scriptDir = __dirname;
 export const addWebsite = catchAsyncError(async (req, res, next) => {
   console.log(req.body);
+  const filePathOuter = join(scriptDir, "../../");
+  const filePathInner = join(
+    filePathOuter,
+    "languages",
+    "resources",
+    "ar.json"
+  );
+  const { title, titleInArabic } = req.body;
+  fs.writeFile(filePathInner, JSON.stringify({ title }, null, 2), "utf8");
   let result = await websiteModal.create(req.body);
   !result && next(new AppError("don't create the website"));
   res.send({ message: "success", data: result });
