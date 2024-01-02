@@ -17,7 +17,7 @@ websiteRoute
     saveImg,
     portfolio.addWebsite
   )
-  .get(auth, portfolio.getAllWebsites);
+  .get( portfolio.getAllWebsites);
 websiteRoute
   .route("/:id")
 
