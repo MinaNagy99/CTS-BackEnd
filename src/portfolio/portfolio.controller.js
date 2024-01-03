@@ -3,43 +3,11 @@ import { AppError } from "../../Utilities/Utilities.js";
 import websiteModal from "../../dataBase/models/website.model.js";
 import { catchAsyncError } from "../../middleware/catchAsyncError.js";
 import { removeImage } from "../../middleware/deleteImg.js";
-import fs from "fs/promises";
-import { dirname, join } from "path";
-import { fileURLToPath } from "url";
-import { json } from "express";
 
-const filePathFunction = (fileName) => {
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = dirname(__filename);
-  const scriptDir = __dirname;
-  const filePath = join(
-    scriptDir,
-    `../../languages/resources/${fileName}.json`
-  );
-  return filePath;
-};
 
 export const addWebsite = catchAsyncError(async (req, res, next) => {
-  const { title, titleInArabic } = req.body;
-  const filePathAR = filePathFunction("ar");
-  const filePathEN = filePathFunction("en");
-  console.log(filePathAR);
-  // console.log(filePathAR);
-  // let existingData;
-
-  const fileContentAR = await fs.readFile(filePathAR, "utf8");
-  const dataInAr = JSON.parse(fileContentAR);
-  dataInAr[title] = titleInArabic;
-  await fs.writeFile(filePathAR, JSON.stringify(dataInAr));
-  //================================================================
-  const fileContentEn = await fs.readFile(filePathEN, "utf8");
-  const dataInEN = JSON.parse(fileContentEn);
-  dataInEN[title] = title;
-  await fs.writeFile(filePathEN, JSON.stringify(dataInEN));
-
   let result = await websiteModal.create(req.body);
   !result && next(new AppError("Unable to create the website"));
-
   res.send({ message: "success", data: result });
 });
 
