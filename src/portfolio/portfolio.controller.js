@@ -3,9 +3,22 @@ import { AppError } from "../../Utilities/Utilities.js";
 import websiteModal from "../../dataBase/models/website.model.js";
 import { catchAsyncError } from "../../middleware/catchAsyncError.js";
 import { removeImage } from "../../middleware/deleteImg.js";
+import { dirname, join } from "path";
+import { fileURLToPath } from "url";
+import { deleteTitle } from "../../middleware/handelTitleInJson.js";
+const filePathFunction = (fileName) => {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+  const scriptDir = __dirname;
+  const filePath = join(
+    scriptDir,
+    `../../languages/resources/${fileName}.json`
+  );
 
-
+  return filePath;
+};
 export const addWebsite = catchAsyncError(async (req, res, next) => {
+  console.log('ana hna fe a5r mr7la');
   let result = await websiteModal.create(req.body);
   !result && next(new AppError("Unable to create the website"));
   res.send({ message: "success", data: result });
@@ -15,7 +28,7 @@ export const editWebsite = catchAsyncError(async (req, res, next) => {
   let { id } = req.params;
 
   let result = await websiteModal.findByIdAndUpdate(id, req.body);
-  const { mainImg, logo, previewImgs } = result;
+  const { mainImg, logo, title, previewImgs } = result;
   if (req.body.mainImg) {
     removeImage(mainImg.public_id);
   }
@@ -32,7 +45,8 @@ export const editWebsite = catchAsyncError(async (req, res, next) => {
   res.status(200).send({ message: "success", data: result });
 });
 
-export const deleteWebsite = catchAsyncError(async (req, res) => {
+export const deleteWebsite = catchAsyncError(async (req, res, next) => {
+  console.log('deleteWebsite');
   const { id } = req.params;
   const { mainImg, logo, previewImgs } = await websiteModal.findByIdAndDelete(
     id
@@ -42,7 +56,7 @@ export const deleteWebsite = catchAsyncError(async (req, res) => {
   });
   removeImage(mainImg.public_id, logo.public_id, ...previewImgsIds);
 
-  res.status(200).send({ message: "success" });
+  res.status(200).json({ message: "success" });
 });
 
 export const getAllWebsites = catchAsyncError(async (req, res, next) => {

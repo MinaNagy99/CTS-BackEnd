@@ -6,3 +6,5 @@ export function removeImage(publicId) {
     cloudinary.api.delete_resources(id, { folder: "websites" });
   });
 }
+
+

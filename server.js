@@ -7,6 +7,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import userRouter from "./src/user/user.router.js";
 import languageRoute from "./src/Language/Language.router.js";
+import BlogRoute from "./src/blogs/Blogs.router.js";
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -18,6 +19,7 @@ app.use(morgan("combined"));
 app.use("/website", websiteRoute);
 app.use("/user", userRouter);
 app.use("/lang", languageRoute);
+app.use("/blog", BlogRoute);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
