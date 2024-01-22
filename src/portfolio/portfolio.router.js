@@ -14,6 +14,7 @@ websiteRoute
   .route("/")
   .post(
     auth,
+    addTitle,
 
     uploadMixfile([
       { name: "previewImgs", maxCount: 3 },

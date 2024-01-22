@@ -1,3 +1,4 @@
+import slugify from "slugify";
 import { AppError } from "../../Utilities/Utilities.js";
 import blogModel from "../../dataBase/models/Blogs.model.js";
 import { catchAsyncError } from "../../middleware/catchAsyncError.js";
@@ -10,19 +11,23 @@ const getAllBlogs = catchAsyncError(async (req, res, next) => {
   res.status(200).send({ message: "success", data: result });
 });
 const addBlog = catchAsyncError(async (req, res, next) => {
-  let result = await blogModel.create(req.body);
-  let {title,titleInArabic} =req.body;
-  console.log(title, titleInArabic);
-  addToJsonFile(title,title,titleInArabic)
-  delete result.titleInArabic
+  const title = req.body.title;
+  req.body.createdBy = req.user._id
+  req.body.slug = slugify(title);
+  const result = new blogModel(req.body);
+  await result.save()
+
   !result && next(new AppError("Unable to create the blog"));
   res.send({ message: "success", data: result });
 });
 
- const editBlog = catchAsyncError(async (req, res, next) => {
+const editBlog = catchAsyncError(async (req, res, next) => {
   let { id } = req.params;
+  const { title, titleInArabic } = req.body;
+  await addToJsonFile(title, title, titleInArabic);
+  delete req.body.titleInArabic; // Delete titleInArabic property
 
-  let result = await blogModel.findByIdAndUpdate(id, req.body);
+  const result = await blogModel.findByIdAndUpdate(id, req.body);
   const { mainImg, images } = result;
   if (req.body.mainImg) {
     removeImage(mainImg.public_id);
@@ -51,4 +56,9 @@ const deleteBlog = catchAsyncError(async (req, res, next) => {
   res.status(200).send({ message: "success", data: result });
 });
 
-export { deleteBlog, getAllBlogs, editBlog, addBlog };
+const removeAllBlogs = catchAsyncError(async(req,res,next) => {
+  const result =  await blogModel.deleteMany()
+  res.status(200).send({ message: "success", data:result });
+})
+
+export { deleteBlog, getAllBlogs, editBlog, addBlog ,removeAllBlogs};

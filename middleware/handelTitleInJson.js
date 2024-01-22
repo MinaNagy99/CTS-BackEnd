@@ -3,6 +3,7 @@ import fs from "fs/promises";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import websiteModal from "../dataBase/models/website.model.js";
+
 const readeFileJson = async () => {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
@@ -15,9 +16,11 @@ const readeFileJson = async () => {
   return { fileContentAR, fileContentEn, filePathAR, filePathEN };
 };
 const { fileContentAR, fileContentEn, filePathAR, filePathEN } =
-  await readeFileJson();
+await readeFileJson();
 
 export const addTitle = catchAsyncError(async (req, res, next) => {
+  const { fileContentAR, fileContentEn, filePathAR, filePathEN } =
+    await readeFileJson();
   const { title, titleInArabic } = req.body;
   fileContentAR[title] = titleInArabic;
   fileContentEn[title] = title;
@@ -26,12 +29,23 @@ export const addTitle = catchAsyncError(async (req, res, next) => {
   await fs.writeFile(filePathEN, JSON.stringify(fileContentEn));
   next();
 });
-export const addToJsonFile = async (key, valueInEN, valueInAR) => {
+export const addToJsonFile = catchAsyncError(async (key, valueInEN, valueInAR) => {
+ 
   fileContentAR[key] = valueInAR;
   fileContentEn[key] = valueInEN;
   await fs.writeFile(filePathAR, JSON.stringify(fileContentAR));
   await fs.writeFile(filePathEN, JSON.stringify(fileContentEn));
-};
+  return { message: "success" };
+})
+export const writeToJsonFile = catchAsyncError(async (req, res, next) => {
+  const { title, titleInArabic } = req.body;
+
+ 
+   await addToJsonFile(title, title, titleInArabic);
+    next();
+
+  
+});
 export const deleteFromJsonFile = async (key) => {
   delete fileContentAR[key];
   delete fileContentEn[key];
@@ -50,6 +64,7 @@ export const updatedFromJsonFile = async (key, value, fileType) => {
     await fs.writeFile(filePathEN, JSON.stringify(fileContentEn));
   }
 };
+
 export const updateTitle = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;
   const { title: newTitle, titleInArabic: newTitleInArabic } = req.body;

@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { model } from "mongoose";
 
 const schema = mongoose.Schema({
   mainImg: {
@@ -25,6 +25,6 @@ const schema = mongoose.Schema({
   },
 });
 
-const websiteModal = mongoose.model("website", schema);
+const websiteModal = model("website", schema);
 
 export default websiteModal;

@@ -2,7 +2,6 @@ import multer from "multer";
 import { AppError } from "../Utilities/Utilities.js";
 
 const option = () => {
-
   const inMemoryStorage = multer.memoryStorage();
 
   function fileFilter(req, file, cb) {
@@ -13,11 +12,14 @@ const option = () => {
     }
   }
 
-  return multer({ storage:inMemoryStorage, fileFilter });
+  return multer({ storage: inMemoryStorage, fileFilter });
 };
 
-export const uploadSingleFile = (fieldName, folderName) =>
-  option(folderName).single(fieldName);
+export const uploadSingleFile = (fieldName, folderName) => {
+  return option(folderName).single(fieldName);
+};
 
-export const uploadMixfile = (arrayOfFields, folderName) =>
-  option(folderName).fields(arrayOfFields);
+export const uploadMixfile = (arrayOfFields, folderName) =>{
+  return  option(folderName).fields(arrayOfFields);
+}
+ 
