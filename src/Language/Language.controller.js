@@ -22,6 +22,7 @@ const getArabicFile = catchAsyncError(async (req, res, next) => {
 });
 const getEnglishFile = catchAsyncError(async (req, res, next) => {
   try {
+    
     const filePathOuter = join(scriptDir, "../../");
     const filePathInner = join(filePathOuter, "languages", "resources", "en.json");
 

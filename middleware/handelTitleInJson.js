@@ -9,7 +9,7 @@ const readeFileJson = async () => {
   const __dirname = dirname(__filename);
   const scriptDir = __dirname;
   const filePathAR = join(scriptDir, `../languages/resources/ar.json`);
-  const filePathEN = join(scriptDir, `../languages/resources/EN.json`);
+  const filePathEN = join(scriptDir, `../languages/resources/en.json`);
 
   const fileContentAR = JSON.parse(await fs.readFile(filePathAR, "utf8"));
   const fileContentEn = JSON.parse(await fs.readFile(filePathEN, "utf8"));
